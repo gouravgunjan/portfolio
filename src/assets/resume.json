@@ -1,0 +1,105 @@
+{
+  "name": "Gourav Gunjan",
+  "contact": {
+    "location": "Bangalore, India",
+    "email": "gourav.gunjan@gmail.com",
+    "phone": "+91-8147902676",
+    "linkedin": "linkedin.com/in/gouravgunjan",
+    "github": "github.com/gouravgunjan"
+  },
+  "summary": "A results-driven Staff Frontend Engineer and Architect with over 12 years of experience designing, building, and leading the development of large-scale, mission-critical applications. Proven expertise in architecting complex UI systems, modernizing legacy codebases, and mentoring high-performing engineering teams. Passionate about driving innovation and delivering solutions that yield significant business impact, such as reducing developer onboarding time by 80%, decreasing application load times from minutes to seconds, and supporting financial systems managing over $2 trillion in monthly transactions.",
+  "competencies": [
+    {
+      "category": "UI Architecture & System Design",
+      "skills": "Scalable Frontend Architectures, Design Systems, Micro-Frontends, Performance Optimization"
+    },
+    {
+      "category": "Technical Leadership & Mentorship",
+      "skills": "Team Leadership (30+ engineers), Code Reviews, Best Practices, Intern Mentorship"
+    },
+    {
+      "category": "Frontend Technologies",
+      "skills": "JavaScript, TypeScript, Angular (4-12+), HTML5, CSS3/SCSS, RxJS, NgRx, WebSockets"
+    },
+    {
+      "category": "Frameworks & Libraries",
+      "skills": "Angular Material, Ag-Grid, D3.js, Highcharts.js, Node.js, Electron"
+    },
+    {
+      "category": "Backend & Database",
+      "skills": "Java, C#, Hazelcast, SQL, MongoDB, Firebase"
+    },
+    {
+      "category": "DevOps & Cloud",
+      "skills": "Google Cloud Platform (GCP), Azure, CI/CD, Agile Methodologies"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Google",
+      "location": "Bangalore, India",
+      "role": "Software Engineer",
+      "period": "July 2023 – Present",
+      "description": "As the UI technical lead for Workspace Platform Security, I spearhead the architectural strategy, development, and mentorship for critical user-facing security applications, informally guiding UI projects for over 30 engineers.",
+      "achievements": [
+        "Architected and led the development of the \"Security Advisor\" frontend, a zero-bug UI tool that upgraded security capabilities for over 65,000 customer seats through collaboration with 5+ cross-functional teams.",
+        "Re-architected the legacy Security Investigation Tool (SIT) onboarding platform, leading to an 80% reduction in time-to-onboard and a 50% reduction in code required for over 30 partner teams.",
+        "Authored the comprehensive technical design for modernizing SIT, proposing a new, extensible architecture that decouples components and simplifies future development, reducing the time to add new features from weeks to days.",
+        "Mentored 10 interns (3 direct, 7 indirect) who all successfully converted to full-time Software Engineers.",
+        "Consistently recognized for impact and leadership with multiple performance awards, spot bonuses, and peer bonuses."
+      ]
+    },
+    {
+      "company": "VMware",
+      "location": "Bangalore, India",
+      "role": "Member of Technical Staff L3",
+      "period": "June 2021 – July 2022",
+      "description": "Served as the UI Team Lead for a team of 3 developers on VMware Aria Operations for Logs, a high-scale log analytics platform.",
+      "achievements": [
+        "Led the successful framework migration of a 100,000+ LOC enterprise application from Angular 8 to Angular 12, improving performance and maintainability.",
+        "Architected and implemented a dynamic, scalable theming system, including a full dark mode, by creating a new color palette and SASS mixin library, significantly enhancing user experience."
+      ]
+    },
+    {
+      "company": "Morgan Stanley",
+      "location": "Bangalore, India",
+      "role": "Senior Manager",
+      "period": "Nov 2017 – June 2021",
+      "description": "Functioned as the UI Architect and Technical Lead for a team of 5 developers, delivering applications for a fund management division handling over $2 trillion in monthly transactions.",
+      "achievements": [
+        "Engineered a distributed caching infrastructure using Java and Hazelcast, slashing application load times from over 2 minutes to under 2 seconds.",
+        "Developed a real-time data update framework using WebSockets, enabling a 40+ member fund management team to manage client information with live data, significantly improving operational efficiency.",
+        "Led the end-to-end design and delivery of 5 mission-critical workflow management applications, enabling internal users to manage complex financial operations efficiently."
+      ]
+    },
+    {
+      "company": "Philips Healthcare",
+      "location": "Bangalore, India",
+      "role": "Senior Software Engineer",
+      "period": "Nov 2013 – Oct 2017",
+      "description": "Developed software for advanced CT scanners and innovated new clinical workflow solutions.",
+      "achievements": [
+        "Pioneered and developed three novel proof-of-concept products by identifying critical clinician pain points during on-site hospital visits. These innovations included a voice-controlled scanner operation system, a gesture-based image manipulation tool, and an augmented reality viewer for precise biopsy guidance."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Restaurant Management System",
+      "url": "https://youtu.be/tr4ZjxChz7g",
+      "description": "Independently architected and developed a proprietary, enterprise-grade restaurant management application (>100k LOC). The system provides end-to-end functionality including billing, inventory management, staff scheduling, and advanced reporting/insights."
+    },
+    {
+      "name": "The Angular Coder",
+      "url": "https://www.youtube.com/channel/UCMsApJ_b10ij1L9FD5IGgoQ",
+      "description": "Creator of a YouTube channel dedicated to teaching advanced concepts in Angular and TypeScript to the developer community."
+    }
+  ],
+  "education": {
+    "institution": "Haldia Institute of Technology",
+    "location": "West Bengal, India",
+    "degree": "B.Tech in Computer Science",
+    "year": 2013,
+    "cgpa": "8.08/10"
+  }
+}

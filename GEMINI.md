@@ -10,14 +10,28 @@ All development should follow a version-controlled workflow.
 
 ---
 
-## Pre-Commit Health Check
+## Pre-Commit Health Check & Verification Workflow
 
-Before any `git commit` operation, you **must** run a full local health check.
+Before any `git commit` operation, you **must** run a full local health check to verify changes. **Do not run the development server directly.** Instead, rely on the project's automated tests to ensure correctness.
+
+### 1. Run the Test Suite
 
 Run the following command:
 `npm run test:docker`
 
-This command builds the application and runs all tests in a clean environment. After it completes, you **must** also visually inspect the newly generated screenshot files in the `tests/example.spec.ts-snapshots` directory to confirm that any visual changes are intentional.
+This command builds the application and runs all tests in a clean, containerized environment.
+
+### 2. Verification Steps
+
+After the command completes, you **must** perform the following verification steps:
+
+-   **Static Images:** Visually inspect the newly generated screenshot files in the `tests/example.spec.ts-snapshots` directory to confirm that any visual changes to the initial page state are intentional and meet design standards (e.g., proper contrast, layout).
+-   **Animation Video:** A video of the test run will be saved to `tests/latest_animation_test.webm`. **This is the most critical step.** You must review this video to confirm that all animations and scroll-driven effects are working smoothly and correctly.
+
+### 3. Testing Best Practices
+
+-   **Use Test IDs:** Always use `data-testid` attributes for selectors in tests to avoid failures from CSS module hashing or class name refactors.
+-   **Use Placeholders:** For testing animation logic, use simple placeholder elements (e.g., colored `divs`) instead of relying on external network assets (like images from a CDN) to ensure tests are fast, reliable, and deterministic.
 
 ---
 

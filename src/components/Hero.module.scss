@@ -1,0 +1,54 @@
+// src/components/Hero.module.scss
+@import '../styles/variables';
+
+.heroContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background-color: #1a1a1a; // A base background color
+}
+
+.heroTitle {
+  font-size: 4rem;
+  font-weight: 700;
+  margin: 0;
+  color: $primary-color;
+  z-index: 3;
+}
+
+.heroSubtitle {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  max-width: 800px;
+  color: $secondary-color;
+  z-index: 3;
+}
+
+// Removed the overlay as we will use solid colors for now
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  // Using a dark blue to represent the mountain layer
+  background-color: #2a3a4a; 
+  z-index: 0;
+}
+
+.foreground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  // Using a semi-transparent grey to represent the fog layer
+  background-color: rgba(128, 128, 128, 0.5); 
+  z-index: 2;
+}

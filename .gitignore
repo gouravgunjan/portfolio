@@ -21,4 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-\n# Test results\n/test-results
+
+# Test results
+/test-results
+
+# Agents
+/plan

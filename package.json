@@ -14,9 +14,12 @@
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
+    "framer-motion": "^12.23.12",
+    "gsap": "^3.13.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-scripts": "5.0.1",
+    "sass": "^1.90.0",
     "typescript": "^5.9.2",
     "web-vitals": "^2.1.4"
   },
@@ -26,7 +29,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "test:update-goldens": "npm run build && serve -s build -l 3000 & wait-on http://localhost:3000 && playwright test --update-snapshots",
-    "test:docker": "docker build -t playwright-tests . && docker run --rm -v $(pwd):/app playwright-tests"
+    "test:docker": "docker build -t playwright-tests . && docker run --rm -v $(pwd):/app playwright-tests && npm run save-test-video",
+    "save-test-video": "cp test-results/example-hero-section-parallax-animation-works-on-scroll-chromium/video.webm tests/latest_animation_test.webm"
   },
   "eslintConfig": {
     "extends": [
