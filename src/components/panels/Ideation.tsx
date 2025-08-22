@@ -21,7 +21,7 @@ const Ideation: React.FC = () => {
 
   return (
     <div className={styles.ideationPanel}>
-      <div data-testid="parallax-container" className={styles.parallaxContainer} style={parallaxStyle}>
+      <div data-testid="ideation-parallax-container" className={styles.parallaxContainer} style={parallaxStyle}>
         {/* Parallax items will go here */}
       </div>
     </div>
