@@ -40,9 +40,10 @@
       "location": "Bangalore, India",
       "role": "Software Engineer",
       "period": "July 2023 – Present",
+      "technologies": "Boq Wiz, Python, Java, PromiseGraph",
       "description": "As the UI technical lead for Workspace Platform Security, I spearhead the architectural strategy, development, and mentorship for critical user-facing security applications, informally guiding UI projects for over 30 engineers.",
       "achievements": [
-        "Architected and led the development of the \"Security Advisor\" frontend, a zero-bug UI tool that upgraded security capabilities for over 65,000 customer seats through collaboration with 5+ cross-functional teams.",
+        "Architected and led the development of the \"Security Advisor\" frontend using Boq Wiz, a zero-bug UI tool that upgraded security capabilities for over 65,000 customer seats through collaboration with 5+ cross-functional teams.",
         "Re-architected the legacy Security Investigation Tool (SIT) onboarding platform, leading to an 80% reduction in time-to-onboard and a 50% reduction in code required for over 30 partner teams.",
         "Authored the comprehensive technical design for modernizing SIT, proposing a new, extensible architecture that decouples components and simplifies future development, reducing the time to add new features from weeks to days.",
         "Mentored 10 interns (3 direct, 7 indirect) who all successfully converted to full-time Software Engineers.",
