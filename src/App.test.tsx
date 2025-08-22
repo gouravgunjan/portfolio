@@ -14,4 +14,5 @@ test('should have no accessibility violations', async () => {
   const { container } = render(<App />);
   const results = await axe(container);
   expect(results).toHaveNoViolations();
+  expect(container).toMatchSnapshot();
 });

@@ -22,9 +22,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "test:e2e": "npm run test:e2e:start-server && wait-on http://localhost:3000 && playwright test; npm run test:e2e:stop-server",
-    "test:e2e:start-server": "NODE_OPTIONS=--max-old-space-size=4096 npm run build && serve -s build -l 3000 &",
-    "test:e2e:stop-server": "kill-port 3000"
+    "test:update-goldens": "npm run build && serve -s build -l 3000 & wait-on http://localhost:3000 && playwright test --update-snapshots",
+    "test:docker": "docker build -t playwright-tests . && docker run --rm -v $(pwd):/app playwright-tests"
   },
   "eslintConfig": {
     "extends": [

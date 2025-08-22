@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
 test('homepage has no visual regressions', async ({ page }) => {
-  await page.goto('/');
-  await expect(page).toHaveScreenshot();
+  await page.goto('http://localhost:3000');
+  await expect(page).toHaveScreenshot('homepage.png');
 });
