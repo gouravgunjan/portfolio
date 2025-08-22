@@ -25,13 +25,13 @@ The following principles must be adhered to throughout the development process:
 
 This project is broken down into the following panels. Each link points to a detailed checklist for that specific panel.
 
--   [Panel 1: Ideation](./panel1.md)
--   [Panel 2: The Blueprint](./panel2.md)
--   [Panel 3: The Toolkit](./panel3.md)
--   [Panel 4: Google](./panel4.md)
--   [Panel 5: VMware](./panel5.md)
--   [Panel 6: Morgan Stanley](./panel6.md)
--   [Panel 7: Philips Healthcare](./panel7.md)
--   [Panel 8: Personal Projects](./panel8.md)
--   [Panel 9: Education](./panel9.md)
--   [Panel 10: Get in Touch](./panel10.md)
+-   [Panel 1: Ideation](./panel1.md) - (Not Started)
+-   [Panel 2: The Blueprint](./panel2.md) - (Not Started)
+-   [Panel 3: The Toolkit](./panel3.md) - (Not Started)
+-   [Panel 4: Google](./panel4.md) - (Not Started)
+-   [Panel 5: VMware](./panel5.md) - (Not Started)
+-   [Panel 6: Morgan Stanley](./panel6.md) - (Not Started)
+-   [Panel 7: Philips Healthcare](./panel7.md) - (Not Started)
+-   [Panel 8: Personal Projects](./panel8.md) - (Not Started)
+-   [Panel 9: Education](./panel9.md) - (Not Started)
+-   [Panel 10: Get in Touch](./panel10.md) - (Not Started)
