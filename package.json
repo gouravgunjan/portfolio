@@ -30,7 +30,7 @@
     "eject": "react-scripts eject",
     "test:update-goldens": "npm run build && serve -s build -l 3000 & wait-on http://localhost:3000 && playwright test --update-snapshots",
     "test:docker": "docker build -t playwright-tests . && docker run --rm -v $(pwd):/app playwright-tests && npm run save-test-video",
-    "save-test-video": "cp test-results/example-hero-section-parallax-animation-works-on-scroll-chromium/video.webm tests/latest_animation_test.webm"
+        "save-test-video": "./save-test-videos.sh"
   },
   "eslintConfig": {
     "extends": [
