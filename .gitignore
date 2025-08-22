@@ -24,6 +24,7 @@ yarn-error.log*
 
 # Test results
 /test-results
+/playwright-report
 
 # Agents
 /plan
