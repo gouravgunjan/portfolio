@@ -1,8 +1,8 @@
 {
   "screenshotDescriptions": {
-    "ideation-panel-initial-state-chromium-linux.png": "This is a screenshot of the 'Ideation' panel. It should have a dark charcoal-black background with a subtle pattern of interconnected lines and dots, resembling a neural network. In the upper-left quadrant of the image, the word 'Ideation' should be clearly visible in a clean, white, sans-serif font."
+    "ideation-panel-initial-state-chromium-linux.png": "This is a screenshot of the 'Ideation' panel. It should have a dark charcoal-black background with a clearly visible, subtle neural network pattern of lines and dots. The word 'Ideation' should be clearly visible in a clean, white, sans-serif font."
   },
   "videoDescriptions": {
-    "Ideation Panel > should have a parallax effect on mouse movement": "This video should show the 'Ideation' panel, which has a dark background with a static grid. Overlaid on this grid is a dynamic neural network pattern that shifts in the opposite direction of the cursor, creating a parallax effect. The word 'Ideation' in white text should also move with the neural network pattern. The video should start with the panel in a static position. Shortly after, the mouse cursor should appear and move around, demonstrating the parallax effect. The movement should be smooth and directly responsive to the cursor's position. The video should end after demonstrating this effect."
+    "Ideation Panel > should have a parallax effect on mouse movement": "This video should show the 'Ideation' panel, which has a dark background with an animated neural network. A network of clearly visible lines forms the background, and a small number of dots travel along these lines. The nodes of the network should appear to be fading in and out randomly. The word 'Ideation' in white text should be visible. The test verifies the parallax mouse-over effect. As the cursor moves, the 'Ideation' text and the neural network should subtly shift in the opposite direction of the cursor, creating a parallax effect. The movement should be smooth and directly responsive to the cursor's position. The video should end after demonstrating this effect."
   }
 }

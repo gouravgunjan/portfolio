@@ -9,6 +9,8 @@
 ## 2. Background
 
 -   [x] Implement the dark, ethereal space background (`#0A0A10`) in `Ideation.module.scss`.
+-   [ ] Create a new component: `src/components/panels/ideation/NeuralNetwork.tsx`
+-   [ ] Implement the animated neural network with pulsing lines and running dots using Canvas.
 -   [x] Add a subtle parallax effect on mouse movement.
 -   [x] Write an E2E test to verify the parallax effect.
 -   [x] Commit changes with message: `feat(panel-1): implement ethereal background with parallax effect`
@@ -21,7 +23,7 @@
 -   [ ] Implement the line as an SVG with a glowing effect.
 -   [ ] Add a gentle, slow-drifting and bending animation.
 -   [ ] Write a screenshot test to verify the look of the line.
--   [ ] Write an E2E test to verify the animation.
+-   [ ] Write a new E2E test to verify the animation.
 -   [ ] Commit changes with message: `feat(panel-1): create ethereal line component with animation`
 
 ### 3.2. Glowing Panels
@@ -30,7 +32,7 @@
 -   [ ] Implement the semi-transparent, glowing rectangular panel.
 -   [ ] Add a fade in and out animation.
 -   [ ] Write a screenshot test to verify the look of the panel.
--   [ ] Write an E2E test to verify the animation.
+-   [ ] Write a new E2E test to verify the animation.
 -   [ ] Commit changes with message: `feat(panel-1): create glowing panel component with animation`
 
 ### 3.3. Alphabetic Characters
@@ -39,7 +41,7 @@
 -   [ ] Implement the soft, pulsating glow effect.
 -   [ ] Animate the characters to float separately.
 -   [ ] Write a screenshot test to verify the look of the characters.
--   [ ] Write an E2E test to verify the floating animation.
+-   [ ] Write a new E2E test to verify the floating animation.
 -   [ ] Commit changes with message: `feat(panel-1): create floating character component with animation`
 
 ### 3.4. Nebula Clouds
@@ -47,7 +49,7 @@
 -   [ ] Create a new component: `src/components/panels/ideation/NebulaCloud.tsx`
 -   [ ] Implement the wispy, nebula-like clouds using fine particles (e.g., with a particle library or custom shaders).
 -   [ ] Add a slow drifting animation.
--   [ ] Write an E2E test to verify the animation.
+-   [ ] Write a new E2E test to verify the animation.
 -   [ ] Commit changes with message: `feat(panel-1): create nebula cloud component with animation`
 
 ### 3.5. UI Sketches
@@ -56,7 +58,7 @@
 -   [ ] Create a new component: `src/components/panels/ideation/UiSketch.tsx`
 -   [ ] Implement the faint, hand-drawn style.
 -   [ ] Add an animation to appear and disappear like fleeting thoughts.
--   [ ] Write an E2E test to verify the animation.
+-   [ ] Write a new E2E test to verify the animation.
 -   [ ] Commit changes with message: `feat(panel-1): create UI sketch component with animation`
 
 ### 3.6. Company Logos
@@ -64,7 +66,7 @@
 -   [ ] Create monochrome SVG versions of the company logos in `src/assets/panels/ideation/`.
 -   [ ] Create a new component: `src/components/panels/ideation/FloatingLogo.tsx`
 -   [ ] Implement the subtle drifting animation in the background.
--   [ ] Write an E2E test to verify the animation.
+-   [ ] Write a new E2E test to verify the animation.
 -   [ ] Commit changes with message: `feat(panel-1): create floating logo component with animation`
 
 ## 4. Text
