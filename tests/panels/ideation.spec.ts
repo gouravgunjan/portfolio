@@ -12,7 +12,11 @@ test.describe('Ideation Panel', () => {
       return window.getComputedStyle(el).transform;
     });
 
-    await page.mouse.move(100, 100);
+    // Move the mouse to trigger the parallax effect and ensure the video captures it.
+    await page.mouse.move(100, 100, { steps: 10 });
+    await page.waitForTimeout(500); // Pause to make the effect visible in the video
+    await page.mouse.move(page.viewportSize()!.width - 100, page.viewportSize()!.height - 100, { steps: 10 });
+    await page.waitForTimeout(1000); // Ensure video has some length
 
     const transformAfterMove = await parallaxContainer.evaluate((el) => {
       return window.getComputedStyle(el).transform;
