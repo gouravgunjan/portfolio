@@ -5,33 +5,29 @@ const { sanitizeForFilename } = require('./utils');
 
 const rootDir = path.join(__dirname, '..');
 const testsDir = path.join(rootDir, 'tests');
-const videoMetadataPath = path.join(__dirname, 'video-metadata.json');
+const videoManifestPath = path.join(__dirname, 'video-manifest.json');
 
 function processVideoArtifacts() {
-  if (!fs.existsSync(videoMetadataPath)) {
-    console.log('Video metadata file not found. Skipping video processing.');
+  if (!fs.existsSync(videoManifestPath)) {
+    console.log('Video manifest file not found. Skipping video processing.');
     return;
   }
 
-  const videoMetadata = JSON.parse(fs.readFileSync(videoMetadataPath, 'utf-8'));
+  const videoManifest = JSON.parse(fs.readFileSync(videoManifestPath, 'utf-8'));
 
-  for (const videoData of videoMetadata) {
-    const localVideoPath = path.join(rootDir, videoData.videoPath.replace('/app/', ''));
+  for (const videoData of videoManifest) {
+    const localVideoPath = path.join(rootDir, videoData.sourcePath.replace('/app/', ''));
+    const destinationPath = path.join(rootDir, videoData.destinationPath.replace('/app/', ''));
 
     if (fs.existsSync(localVideoPath)) {
-      const specFilePath = path.join(rootDir, videoData.specFilePath.replace('/app/', ''));
-      const videosDirForSpec = `${specFilePath}-videos`;
-
-      if (!fs.existsSync(videosDirForSpec)) {
-        fs.mkdirSync(videosDirForSpec, { recursive: true });
+      const destinationDir = path.dirname(destinationPath);
+      if (!fs.existsSync(destinationDir)) {
+        fs.mkdirSync(destinationDir, { recursive: true });
       }
 
-      const newVideoPath = path.join(videosDirForSpec, `${videoData.sanitizedTestTitle}.webm`);
-
-      if (!fs.existsSync(newVideoPath)) {
-        fs.copyFileSync(localVideoPath, newVideoPath);
-        console.log(`Copied video for "${videoData.testTitle}" to ${newVideoPath}`);
-      }
+      console.log(`Copying video from: ${localVideoPath}`);
+      fs.copyFileSync(localVideoPath, destinationPath);
+      console.log(`Copied video for "${videoData.testTitle}" to ${destinationPath}`);
     } else {
       console.warn(`WARNING: Video not found at expected local path: ${localVideoPath}`);
     }
@@ -97,6 +93,7 @@ async function verifyAllArtifacts() {
 
     const descriptions = JSON.parse(fs.readFileSync(dataFile, 'utf-8'));
     const describedVideos = new Set(Object.keys(descriptions.videoDescriptions || {}));
+    const describedScreenshots = new Set(Object.keys(descriptions.screenshotDescriptions || {}));
 
     const videosDir = `${specFile}-videos`;
     if (fs.existsSync(videosDir)) {
@@ -127,6 +124,37 @@ async function verifyAllArtifacts() {
             console.error(`- "${title}"`);
         }
         allVerified = false;
+    }
+
+    const snapshotsDir = `${specFile}-snapshots`;
+    if (fs.existsSync(snapshotsDir)) {
+      for (const snapshotFile of fs.readdirSync(snapshotsDir)) {
+        const snapshotName = path.basename(snapshotFile);
+        let foundDescription = false;
+        for (const testTitle in descriptions.screenshotDescriptions) {
+          if (snapshotName === testTitle) {
+            const description = descriptions.screenshotDescriptions[testTitle];
+            if (!await verifyArtifact(path.join(snapshotsDir, snapshotFile), description)) {
+              allVerified = false;
+            }
+            describedScreenshots.delete(testTitle);
+            foundDescription = true;
+            break;
+          }
+        }
+        if (!foundDescription) {
+          console.error(`ERROR: Screenshot artifact "${snapshotFile}" was found but has no corresponding description in ${dataFile}.`);
+          allVerified = false;
+        }
+      }
+    }
+
+    if (describedScreenshots.size > 0) {
+      console.error(`ERROR: The following screenshot descriptions in ${dataFile} did not have a matching screenshot artifact:`);
+      for(const title of describedScreenshots) {
+          console.error(`- "${title}"`);
+      }
+      allVerified = false;
     }
   }
 

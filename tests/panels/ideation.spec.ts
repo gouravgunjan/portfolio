@@ -4,9 +4,12 @@ import { addCursor } from '../cursor-helper';
 test.describe('Ideation Panel', () => {
   test('should have a parallax effect on mouse movement', async ({ page }) => {
     await page.goto('http://localhost:3000');
-    await addCursor(page);
 
+    // Take the screenshot before adding the cursor
     await expect(page).toHaveScreenshot('ideation-panel-initial-state.png');
+
+    // Add the cursor for the video recording
+    await addCursor(page);
 
     const parallaxContainer = page.locator('[data-testid="ideation-parallax-container"]');
 

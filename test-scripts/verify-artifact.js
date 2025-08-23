@@ -15,7 +15,12 @@ function fileToGenerativePart(filePath) {
 }
 
 async function run() {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ 
+    model: "gemini-1.5-pro",
+    generationConfig: {
+      responseMimeType: "text/plain",
+    }
+  });
 
   const filePath = process.argv[2];
   const expectedDescription = process.argv[3];
@@ -26,16 +31,16 @@ async function run() {
   }
 
   const prompt = `
-    You are a visual verification agent. Your task is to compare an image or video with a given description.
+    You are a visual verification agent. Your task is to analyze the provided video and determine if it matches the given description. Your entire response must be plain text.
 
     **Description:**
     ${expectedDescription}
 
     **Instructions:**
-    1. Analyze the provided image/video.
+    1. Analyze the provided video.
     2. Compare its content and meaning with the description.
-    3. If the image/video perfectly matches the description in content and meaning, respond with "PASS".
-    4. If there is any mismatch, respond with "FAIL" and provide a brief, one-sentence explanation of the mismatch.
+    3. If the image/video perfectly matches the description, respond with the single word "PASS".
+    4. If there is any mismatch, respond with "FAIL" followed by a colon and a detailed explanation of the mismatch.
   `;
 
   const filePart = [fileToGenerativePart(filePath)];
