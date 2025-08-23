@@ -3,10 +3,11 @@ const path = require('path');
 const AdmZip = require('adm-zip');
 const { execSync } = require('child_process');
 
-const rootDir = __dirname;
+const rootDir = path.join(__dirname, '..');
 const testsDir = path.join(rootDir, 'tests');
 const blobReportPath = path.join(rootDir, 'blob-report', 'report.zip');
 const unzippedDir = path.join(rootDir, 'blob-report', 'unzipped');
+const videoMetadataPath = path.join(__dirname, 'video-metadata.json');
 
 /**
  * Sanitizes a string to be used as a valid filename.
@@ -17,74 +18,45 @@ function sanitizeForFilename(name) {
   return name.replace(/\s/g, '-').replace(/[>\/]/g, '-').toLowerCase();
 }
 
-function processBlobReport() {
-  if (!fs.existsSync(blobReportPath)) {
-    console.log('Blob report (report.zip) not found. Skipping artifact processing.');
+function processVideoArtifacts() {
+  if (!fs.existsSync(videoMetadataPath)) {
+    console.log('Video metadata file not found. Skipping video processing.');
     return;
   }
 
-  // Unzip the blob report
-  const zip = new AdmZip(blobReportPath);
-  zip.extractAllTo(unzippedDir, true);
-  console.log(`Extracted ${blobReportPath} to ${unzippedDir}`);
+  const videoMetadata = JSON.parse(fs.readFileSync(videoMetadataPath, 'utf-8'));
 
-  // Find all the test result JSONL files
-  const resultFiles = findFilesByExt(unzippedDir, '.jsonl');
+  for (const videoData of videoMetadata) {
+    // The path from the container is like /app/test-results/....
+    // We need to convert it to a local path.
+    const localVideoPath = path.join(rootDir, videoData.videoPath.replace('/app/', ''));
 
-  for (const resultFile of resultFiles) {
-    const lines = fs.readFileSync(resultFile, 'utf-8').split('\n').filter(Boolean);
-    for (const line of lines) {
-      const result = JSON.parse(line);
-      if (result.method === 'testEnd') {
-        const test = result.params;
-        const video = test.attachments?.find(a => a.name === 'video');
-        if (video && video.path) {
-          const specFilePath = path.join(rootDir, test.location.file);
-          const testTitle = test.title;
-          const videoPath = video.path;
+    if (fs.existsSync(localVideoPath)) {
+      const specFilePath = path.join(rootDir, videoData.specFilePath.replace('/app/', ''));
+      const videosDirForSpec = `${specFilePath}-videos`;
 
-          if (fs.existsSync(videoPath)) {
-            const videosDirForSpec = `${specFilePath}-videos`;
-            if (!fs.existsSync(videosDirForSpec)) {
-              fs.mkdirSync(videosDirForSpec, { recursive: true });
-            }
-
-            const sanitizedTestTitle = sanitizeForFilename(testTitle);
-            const newVideoPath = path.join(videosDirForSpec, `${sanitizedTestTitle}.webm`);
-
-            if (!fs.existsSync(newVideoPath)) {
-              fs.copyFileSync(videoPath, newVideoPath);
-              console.log(`Copied video for "${testTitle}" to ${newVideoPath}`);
-            }
-          } else {
-            console.warn(`WARNING: Video not found at expected path: ${videoPath}`);
-          }
-        }
+      if (!fs.existsSync(videosDirForSpec)) {
+        fs.mkdirSync(videosDirForSpec, { recursive: true });
       }
+
+      const sanitizedTestTitle = sanitizeForFilename(videoData.testTitle);
+      const newVideoPath = path.join(videosDirForSpec, `${sanitizedTestTitle}.webm`);
+
+      if (!fs.existsSync(newVideoPath)) {
+        fs.copyFileSync(localVideoPath, newVideoPath);
+        console.log(`Copied video for "${videoData.testTitle}" to ${newVideoPath}`);
+      }
+    } else {
+      console.warn(`WARNING: Video not found at expected local path: ${localVideoPath}`);
     }
   }
 }
-
-function findFilesByExt(dir, ext) {
-  let files = [];
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files = files.concat(findFilesByExt(fullPath, ext));
-    } else if (entry.name.endsWith(ext)) {
-      files.push(fullPath);
-    }
-  }
-  return files;
-}
-
 
 async function verifyArtifact(filePath, expectedDescription, maxRetries = 3) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       console.log(`Verifying artifact: ${filePath} (Attempt ${attempt}/${maxRetries})`);
-      const command = `node verify-artifact.js "${filePath}" "${expectedDescription}"`;
+      const command = `node ${path.join(__dirname, 'verify-artifact.js')} "${filePath}" "${expectedDescription}"`;
       const result = execSync(command, { stdio: 'pipe' }).toString().trim();
 
       if (result === 'PASS') {
@@ -186,7 +158,7 @@ async function verifyAllArtifacts() {
 }
 
 async function main() {
-  processBlobReport();
+  processVideoArtifacts();
   await verifyAllArtifacts();
 }
 

@@ -1,5 +1,5 @@
 # Use the official Playwright image which comes with browsers pre-installed
-FROM mcr.microsoft.com/playwright:latest
+FROM mcr.microsoft.com/playwright:v1.55.0-jammy
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -9,7 +9,6 @@ COPY test-scripts/package.json .
 
 # Install test dependencies
 RUN npm install
-RUN npx playwright install
 
 # Copy the pre-built application
 COPY build ./build
