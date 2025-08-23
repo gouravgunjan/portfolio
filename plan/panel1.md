@@ -11,7 +11,7 @@
 -   [x] Implement the dark, ethereal space background (`#0A0A10`) in `Ideation.module.scss`.
 -   [x] Add a subtle parallax effect on mouse movement.
 -   [x] Write an E2E test to verify the parallax effect.
--   [ ] Commit changes with message: `feat(panel-1): implement ethereal background with parallax effect`
+-   [x] Commit changes with message: `feat(panel-1): implement ethereal background with parallax effect`
 
 ## 3. Floating Abstract Elements
 

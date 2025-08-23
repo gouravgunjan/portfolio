@@ -25,7 +25,7 @@ The following principles must be adhered to throughout the development process:
 
 This project is broken down into the following panels. Each link points to a detailed checklist for that specific panel.
 
--   [Panel 1: Ideation](./panel1.md) - (Not Started)
+-   [Panel 1: Ideation](./panel1.md) - (In Progress)
 -   [Panel 2: The Blueprint](./panel2.md) - (Not Started)
 -   [Panel 3: The Toolkit](./panel3.md) - (Not Started)
 -   [Panel 4: Google](./panel4.md) - (Not Started)

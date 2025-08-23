@@ -4,7 +4,7 @@
 
 *   **Title:** Ideation Phase
 *   **Aesthetics:**
-    *   **Background:** A dark, ethereal space (e.g., `#0A0A10`), suggesting limitless possibility.
+    *   **Background:** A dark, ethereal space (e.g., `#0A0A10`) with a subtle, animated neural network pattern, suggesting limitless possibility.
     *   **Color Palette:** Soft, glowing neons for the floating elements.
     *   **Effects:** Gentle, slow-drifting motion for all elements. A subtle parallax effect on mouse movement to create depth. Elements should have a soft bloom/glow.
 *   **Visual:** A stunning, cinematic opening visual representing the "Ideation Phase."
