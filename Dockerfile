@@ -4,17 +4,23 @@ FROM mcr.microsoft.com/playwright:latest
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to leverage Docker cache
-COPY package*.json ./
+# Copy the new package.json for test dependencies
+COPY test-scripts/package.json .
 
-# Install dependencies
+# Install test dependencies
 RUN npm install
+RUN npx playwright install
 
-# Copy the rest of the application code
-COPY . .
+# Copy the pre-built application
+COPY build ./build
+
+# Copy the test files
+COPY tests ./tests
+COPY playwright.config.ts .
+COPY video-metadata-reporter.ts .
 
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Command to run the tests and generate golden files
-CMD ["npm", "run", "test:update-goldens"]
+# Command to run the tests
+CMD ["npm", "run", "test"]

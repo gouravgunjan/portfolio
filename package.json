@@ -29,8 +29,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "test:update-goldens": "npm run build && serve -s build -l 3000 & wait-on http://localhost:3000 && playwright test --update-snapshots",
-    "test:docker": "docker build --no-cache -t playwright-tests . && docker run --rm -v $(pwd):/app playwright-tests && npm run process-artifacts",
+    "test:update-goldens": "serve -s build -l 3000 & wait-on http://localhost:3000 && playwright test --update-snapshots",
+    "test:docker": "npm run build && docker build -t playwright-tests . && docker run --rm playwright-tests",
     "process-artifacts": "sleep 2 && node process-artifacts.js"
   },
   "eslintConfig": {

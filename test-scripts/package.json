@@ -1,0 +1,18 @@
+{
+  "name": "test-scripts",
+  "version": "1.0.0",
+  "description": "Test scripts for e2e",
+  "main": "index.js",
+  "scripts": {
+    "test": "serve -s build -l 3000 & wait-on http://localhost:3000 && playwright test && kill-port 3000",
+    "test:update-goldens": "serve -s build -l 3000 & wait-on http://localhost:3000 && playwright test --update-snapshots"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.55.0",
+    "serve": "^14.2.4",
+    "wait-on": "^8.0.4",
+    "typescript": "^5.9.2",
+    "ts-node": "^10.9.2",
+    "kill-port": "^2.0.1"
+  }
+}

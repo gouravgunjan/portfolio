@@ -5,9 +5,8 @@ const { execSync } = require('child_process');
 
 const rootDir = __dirname;
 const testsDir = path.join(rootDir, 'tests');
-const testResultsDir = path.join(rootDir, 'test-results');
-const blobReportPath = path.join(rootDir, 'playwright-report', 'results.zip');
-const unzippedDir = path.join(testResultsDir, 'unzipped');
+const blobReportPath = path.join(rootDir, 'blob-report', 'report.zip');
+const unzippedDir = path.join(rootDir, 'blob-report', 'unzipped');
 
 /**
  * Sanitizes a string to be used as a valid filename.
@@ -20,7 +19,7 @@ function sanitizeForFilename(name) {
 
 function processBlobReport() {
   if (!fs.existsSync(blobReportPath)) {
-    console.log('Blob report (results.zip) not found. Skipping artifact processing.');
+    console.log('Blob report (report.zip) not found. Skipping artifact processing.');
     return;
   }
 
@@ -29,46 +28,20 @@ function processBlobReport() {
   zip.extractAllTo(unzippedDir, true);
   console.log(`Extracted ${blobReportPath} to ${unzippedDir}`);
 
-  // Find all the test result JSON files
-  const resultFiles = findFilesByExt(unzippedDir, '.json');
+  // Find all the test result JSONL files
+  const resultFiles = findFilesByExt(unzippedDir, '.jsonl');
 
   for (const resultFile of resultFiles) {
-    const result = JSON.parse(fs.readFileSync(resultFile, 'utf-8'));
-    const video = result.attachments?.find(a => a.name === 'video');
-    
-    if (video && video.path) {
-      const specFilePath = path.join(rootDir, result.specFile);
-      // Use the full test title path for a unique name
-      function sanitizeForFilename(name) {
-  // This sanitization is designed to match the key in the videoDescriptions object.
-  return name.replace(/\s/g, '-').toLowerCase();
-}
-
-function processBlobReport() {
-  if (!fs.existsSync(blobReportPath)) {
-    console.log('Blob report (results.zip) not found. Skipping artifact processing.');
-    return;
-  }
-
-  // Unzip the blob report
-  const zip = new AdmZip(blobReportPath);
-  zip.extractAllTo(unzippedDir, true);
-  console.log(`Extracted ${blobReportPath} to ${unzippedDir}`);
-
-  // Find all the test result JSON files
-  const resultFiles = findFilesByExt(unzippedDir, '.json');
-
-  for (const resultFile of resultFiles) {
-    const resultData = JSON.parse(fs.readFileSync(resultFile, 'utf-8'));
-    
-    // The result file itself contains suites and tests, find the actual test result
-    const findTestResult = (suite) => {
-      for (const test of suite.tests) {
-        const video = test.results[0]?.attachments?.find(a => a.name === 'video');
+    const lines = fs.readFileSync(resultFile, 'utf-8').split('\n').filter(Boolean);
+    for (const line of lines) {
+      const result = JSON.parse(line);
+      if (result.method === 'testEnd') {
+        const test = result.params;
+        const video = test.attachments?.find(a => a.name === 'video');
         if (video && video.path) {
-          const specFilePath = path.join(rootDir, suite.file);
-          const testTitle = test.title; // Just the title of the test
-          const videoPath = path.join(path.dirname(resultFile), video.path);
+          const specFilePath = path.join(rootDir, test.location.file);
+          const testTitle = test.title;
+          const videoPath = video.path;
 
           if (fs.existsSync(videoPath)) {
             const videosDirForSpec = `${specFilePath}-videos`;
@@ -87,32 +60,6 @@ function processBlobReport() {
             console.warn(`WARNING: Video not found at expected path: ${videoPath}`);
           }
         }
-      }
-      for (const childSuite of suite.suites) {
-        findTestResult(childSuite);
-      }
-    };
-
-    findTestResult(resultData);
-  }
-}
-      const videoPath = path.join(path.dirname(resultFile), video.path);
-
-      if (fs.existsSync(videoPath)) {
-        const videosDirForSpec = `${specFilePath}-videos`;
-        if (!fs.existsSync(videosDirForSpec)) {
-          fs.mkdirSync(videosDirForSpec, { recursive: true });
-        }
-
-        const sanitizedTestTitle = sanitizeForFilename(testTitle);
-        const newVideoPath = path.join(videosDirForSpec, `${sanitizedTestTitle}.webm`);
-
-        if (!fs.existsSync(newVideoPath)) {
-          fs.copyFileSync(videoPath, newVideoPath);
-          console.log(`Copied video for "${testTitle}" to ${newVideoPath}`);
-        }
-      } else {
-        console.warn(`WARNING: Video not found at expected path: ${videoPath}`);
       }
     }
   }
