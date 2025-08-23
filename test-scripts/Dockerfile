@@ -17,6 +17,7 @@ COPY build ./build
 COPY tests ./tests
 COPY test-scripts/playwright.config.ts .
 COPY test-scripts/video-metadata-reporter.ts .
+COPY test-scripts/utils.js .
 
 # Expose the port the app runs on
 EXPOSE 3000

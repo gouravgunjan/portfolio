@@ -1,22 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const AdmZip = require('adm-zip');
 const { execSync } = require('child_process');
+const { sanitizeForFilename } = require('./utils');
 
 const rootDir = path.join(__dirname, '..');
 const testsDir = path.join(rootDir, 'tests');
-const blobReportPath = path.join(rootDir, 'blob-report', 'report.zip');
-const unzippedDir = path.join(rootDir, 'blob-report', 'unzipped');
 const videoMetadataPath = path.join(__dirname, 'video-metadata.json');
-
-/**
- * Sanitizes a string to be used as a valid filename.
- * @param {string} name The string to sanitize.
- * @returns {string} The sanitized string.
- */
-function sanitizeForFilename(name) {
-  return name.replace(/\s/g, '-').replace(/[>\/]/g, '-').toLowerCase();
-}
 
 function processVideoArtifacts() {
   if (!fs.existsSync(videoMetadataPath)) {
@@ -27,8 +16,6 @@ function processVideoArtifacts() {
   const videoMetadata = JSON.parse(fs.readFileSync(videoMetadataPath, 'utf-8'));
 
   for (const videoData of videoMetadata) {
-    // The path from the container is like /app/test-results/....
-    // We need to convert it to a local path.
     const localVideoPath = path.join(rootDir, videoData.videoPath.replace('/app/', ''));
 
     if (fs.existsSync(localVideoPath)) {
@@ -39,8 +26,7 @@ function processVideoArtifacts() {
         fs.mkdirSync(videosDirForSpec, { recursive: true });
       }
 
-      const sanitizedTestTitle = sanitizeForFilename(videoData.testTitle);
-      const newVideoPath = path.join(videosDirForSpec, `${sanitizedTestTitle}.webm`);
+      const newVideoPath = path.join(videosDirForSpec, `${videoData.sanitizedTestTitle}.webm`);
 
       if (!fs.existsSync(newVideoPath)) {
         fs.copyFileSync(localVideoPath, newVideoPath);
@@ -61,23 +47,26 @@ async function verifyArtifact(filePath, expectedDescription, maxRetries = 3) {
 
       if (result === 'PASS') {
         console.log(`Artifact verified successfully: ${filePath}`);
-        return; // Success, exit the loop
-      } else {
+        return true;
+      }
+      else {
         console.error(`Artifact verification failed for ${path.basename(filePath)}:`);
         console.error(result);
         if (attempt === maxRetries) {
-          process.exit(1);
+          return false;
         }
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`Error verifying artifact ${filePath} on attempt ${attempt}:`, error.stdout?.toString(), error.stderr?.toString());
       if (attempt === maxRetries) {
-        process.exit(1);
+        return false;
       }
       console.log('Retrying...');
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds before retrying
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
   }
+  return false;
 }
 
 function findSpecFiles(dir) {
@@ -89,72 +78,64 @@ function findSpecFiles(dir) {
       if (!entry.name.endsWith('-snapshots') && !entry.name.endsWith('-videos')) {
         files = files.concat(findSpecFiles(fullPath));
       }
-    } else if (entry.name.endsWith('.spec.ts')) {
+    }
+    else if (entry.name.endsWith('.spec.ts')) {
       files.push(fullPath);
     }
   }
   return files;
 }
 
-
-
 async function verifyAllArtifacts() {
   console.log('\nStarting verifyAllArtifacts...');
   const specFiles = findSpecFiles(testsDir);
-  console.log(`Found ${specFiles.length} spec files to process.`);
+  let allVerified = true;
 
   for (const specFile of specFiles) {
-    console.log(`Processing spec file: ${specFile}`);
     const dataFile = `${specFile}.data.json`;
-    if (!fs.existsSync(dataFile)) {
-      console.warn(`WARNING: Data file not found for ${specFile}. Skipping.`);
-      continue;
+    if (!fs.existsSync(dataFile)) continue;
+
+    const descriptions = JSON.parse(fs.readFileSync(dataFile, 'utf-8'));
+    const describedVideos = new Set(Object.keys(descriptions.videoDescriptions || {}));
+
+    const videosDir = `${specFile}-videos`;
+    if (fs.existsSync(videosDir)) {
+      for (const videoFile of fs.readdirSync(videosDir)) {
+        const videoName = path.basename(videoFile, '.webm');
+        let foundDescription = false;
+        for (const testTitle in descriptions.videoDescriptions) {
+          if (sanitizeForFilename(testTitle) === videoName) {
+            const description = descriptions.videoDescriptions[testTitle];
+            if (!await verifyArtifact(path.join(videosDir, videoFile), description)) {
+              allVerified = false;
+            }
+            describedVideos.delete(testTitle);
+            foundDescription = true;
+            break;
+          }
+        }
+        if (!foundDescription) {
+          console.error(`ERROR: Video artifact "${videoFile}" was found but has no corresponding description in ${dataFile}.`);
+          allVerified = false;
+        }
+      }
     }
-
-    try {
-      const descriptions = JSON.parse(fs.readFileSync(dataFile, 'utf-8'));
-
-      if (descriptions.screenshotDescriptions) {
-        const snapshotsDir = `${specFile}-snapshots`;
-        console.log(`- Checking for screenshots in: ${snapshotsDir}`);
-        if (fs.existsSync(snapshotsDir)) {
-          for (const file of fs.readdirSync(snapshotsDir)) {
-            if (file.endsWith('.png')) {
-              const snapshotName = file.replace(/-chromium-linux.png|-firefox-linux.png|-webkit-linux.png/, '.png');
-              const description = descriptions.screenshotDescriptions[snapshotName];
-              if (description) {
-                await verifyArtifact(path.join(snapshotsDir, file), description);
-              }
-            }
-          }
-        } else {
-          console.log(`- Snapshot directory not found.`);
+    
+    if (describedVideos.size > 0) {
+        console.error(`ERROR: The following video descriptions in ${dataFile} did not have a matching video artifact:`);
+        for(const title of describedVideos) {
+            console.error(`- "${title}"`);
         }
-      }
-
-      if (descriptions.videoDescriptions) {
-        const videosDirForSpec = `${specFile}-videos`;
-        console.log(`- Checking for videos in: ${videosDirForSpec}`);
-        if (fs.existsSync(videosDirForSpec)) {
-          for (const videoFile of fs.readdirSync(videosDirForSpec)) {
-            const videoNameWithoutExt = path.basename(videoFile, '.webm');
-            for (const testTitle in descriptions.videoDescriptions) {
-              if (sanitizeForFilename(testTitle) === videoNameWithoutExt) {
-                const description = descriptions.videoDescriptions[testTitle];
-                await verifyArtifact(path.join(videosDirForSpec, videoFile), description);
-                break;
-              }
-            }
-          }
-        } else {
-          console.log(`- Video directory not found.`);
-        }
-      }
-    } catch (error) {
-      console.warn(`ERROR: Could not process descriptions for ${specFile}:`, error);
+        allVerified = false;
     }
   }
-  console.log('Finished verifyAllArtifacts.');
+
+  if (!allVerified) {
+    console.error('\nArtifact verification failed.');
+    process.exit(1);
+  } else {
+    console.log('\nAll artifacts verified successfully.');
+  }
 }
 
 async function main() {

@@ -2,6 +2,7 @@
   {
     "videoPath": "/app/test-results/panels-ideation-Ideation-P-2b4b6-ax-effect-on-mouse-movement-chromium/video.webm",
     "specFilePath": "/app/tests/panels/ideation.spec.ts",
-    "testTitle": "chromium > panels/ideation.spec.ts > Ideation Panel > should have a parallax effect on mouse movement"
+    "testTitle": "Ideation Panel > should have a parallax effect on mouse movement",
+    "sanitizedTestTitle": "ideation-panel---should-have-a-parallax-effect-on-mouse-movement"
   }
 ]
